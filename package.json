@@ -1,9 +1,6 @@
 {
   "name": "find-it",
   "version": "0.0.1",
-  "scripts": {
-    "start": "node index.js"
-  },
   "dependencies": {
     "express": "^4.10.6",
     "gm": "^1.23.0",
@@ -13,5 +10,11 @@
     "mysql": "^2.5.4",
     "sha1": "^1.1.1",
     "ws": "0.4.x"
-  }
+  },
+  "engines": {
+    "node": "6.9.5"
+  },
+  "scripts": {
+    "start": "node index.js"
+  }  
 }
