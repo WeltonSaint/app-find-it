@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html ng-app="app" class="no-js" lang="pt-br">
+    <head>
+        <% var title= 'Find-It - '; %>
+        <% switch (value) {
+            case 'login' : %>
+                    <% title += 'Login' %>
+                    <% break;                
+            case 'signup' : %>
+                    <% title += 'Cadastrar' %>
+                    <% break;                
+            case 'forgot' : %>
+                    <% title += 'Esqueci minha Senha' %>
+                    <% break;
+            
+            } %>
+        <% include partials/header.ejs %>
+        <script src="/js/auth.js"></script>    
+    </head>
+    <body ng-controller="authCtrl" class="color-primary-dark">
+        <div class="container">
+            <div class="row img-responsive center-align">    
+                <img  src="/images/app_logo.png" alt="App Logo">
+            </div>
+            <% switch (value) {
+                case 'login' : %>
+                    <% include partials/login.ejs %>
+                    <% break;                
+                case 'signup' : %>
+                    <% include partials/signup.ejs %>
+                    <% break;                
+                case 'forgot' : %>
+                    <% include partials/forgot.ejs %>
+                    <% break;
+                
+                } %>
+        </div>
+        <div id="modalMessage" class="modal">
+            <div class="modal-content">
+                <h4>{{msgTitle}}</h4>
+                <p>{{msgContent}}</p>
+            </div>
+            <div class="modal-footer">
+                <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat" ng-click="closeMessage()">OK</a>
+            </div>
+        </div>
+    </body>
+</html>

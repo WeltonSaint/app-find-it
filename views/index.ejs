@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html ng-app="app" ng-controller="indexCtrl" data-ng-init="init()" class="no-js" lang="pt-br">
+    <head>
+        <% var title= 'Find-It'; %>
+        <% include partials/header.ejs %>
+        <script src="/js/index.js"></script>    
+        <script>
+             function readURL(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#falseinput').attr('src', e.target.result);
+                        console.log(e.target.result);
+                        $('#base').val(e.target.result);
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+        </script>
+    </head>
+<body>    
+    <% include partials/nav.ejs %>
+    <!-- <form id="uploadForm"
+        enctype="multipart/form-data"
+        action="/photo"
+        method="post">
+        <div class="file-field input-field">
+            <div class="btn">
+                <span>Arquivo</span>
+                <input type="file" name="userPhoto" accept="image/gif, image/jpeg, image/png" onchange="readURL(this);" multiple />
+            </div>
+            <div class="file-path-wrapper">
+                <input class="file-path validate" type="text" placeholder="Upload one or more files">
+            </div>
+            <textarea id="base"></textarea>
+            <span id="status"></span>
+        </div>
+        <input class="waves-effect waves-light btn" type="submit" value="Upload Image" name="submit">
+    </form>
+    
+    
+ -->
+     <div>
+        <h2 class="text-primary-dark">{{option}} :</h2>
+     <!--   <label>Name:</label>
+        <input type="text" ng-model="yourName" placeholder="Enter a name here">
+        <hr>
+        <h1>Hello {{yourName}}!</h1> -->
+        <div>
+            <div class="row" ng-repeat="x in items">
+                <div class="col s12 m7">
+                    <div class="card">
+                        <div class="card-content">                        
+                            <p>{{x.nomeItem}}</p>
+                            <p>{{x.dataCadastro}}</p>
+                            <p>{{x.nomeItem}}</p>
+                            <p>{{x.nomeCategoria}}</p>
+                            <p>{{x.nomeStatus}}</p>                            
+                            <p>{{x.descricaoItem}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> 
+    <div class="fixed-action-btn">
+        <a class="btn-floating btn-large waves-effect right waves-light teal lighten-2"><i class="material-icons">add</i></a>
+    </div>
+    <div id="modalMessage" class="modal">
+        <div class="modal-content">
+            <h4>{{msgTitle}}</h4>
+            <p>{{msgContent}}</p>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat" ng-click="closeMessage()">OK</a>
+        </div>
+    </div>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery.form/3.51/jquery.form.min.js"></script>
+    <script>
+            
+           /* $('#uploadForm').submit(function() {
+                $("#status").empty().text("File is uploading...");
+                $(this).ajaxSubmit({
+                    error: function(xhr) {
+                        status('Error: ' + xhr.status);
+                    },
+                    success: function(response) {
+                        console.log(response)
+                        $("#status").empty().text(response);
+                    }
+                });
+                return false;
+            });          */
+        
+    </script>
+</body>
+</html>

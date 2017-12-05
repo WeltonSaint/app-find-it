@@ -1,0 +1,36 @@
+.color-primary{
+    background-color: #009687;
+}
+.color-primary-dark{
+    background-color: #00594f;
+}
+.text-primary-dark{
+    color: #00594f;
+}
+.text-white{
+    color: white;
+}
+.max-width{
+    width: 100%;
+}
+span.badge {
+    min-width: 1.5rem;
+}
+span.badge.new{
+    background-color: #42a5f5;
+    border-radius: 50%;
+}
+.transparent{
+   background-color: transparent; 
+}
+.card-panel{
+    padding: 5px 20px;
+}
+.img-logo{
+    width: 4.5rem;
+}
+.btn-floating.btn-large i {
+    bottom: 50px;
+    right: 19px;
+}
+/*#33b5e6*/

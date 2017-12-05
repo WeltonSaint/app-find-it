@@ -1,0 +1,37 @@
+<form class="panel-group" name="loginForm" ng-submit="submitLogin(loginForm.$valid)" novalidate>
+    <div class="login-input row card-panel">
+        <div class="input-field">
+            <i class="material-icons prefix">local_post_office</i>
+            <input id="emailUser" name="emailUser" ng-model="data.email" type="email" class="validate" required>
+            <label for="emailUser">Email</label>
+        </div>
+    </div>
+    <div class="login-input row card-panel">
+        <div class="input-field">
+            <i class="material-icons prefix">vpn_key</i>
+            <input id="passwordUser" name="passwordUser" ng-model="data.password" type="password" ng-minlength="6" class="validate" required>
+            <label for="passwordUser">Senha</label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="input-field col s6">
+            <input type="checkbox" class="max-width filled-in" id="continueLogged" ng-model="data.continueLogged"/>
+            <label for="continueLogged" class="text-white"> Continuar Conectado</label>
+        </div>
+        <div class="input-field col s6">                
+            <a href="/forgot" type="submit" class="btn-flat max-width waves-effect waves-light text-white center">Esqueci minha Senha</a>
+        </div>
+    </div>
+    <div class="row">
+        <button type="submit" ng-disabled="loginForm.$invalid"  class="color-primary btn max-width waves-effect waves-light">Conectar</button>
+    </div>
+    <div class="row">
+        <a href="/signup" class="btn-flat max-width waves-effect waves-light text-white center">Não possui uma conta ? Crie uma agora</a>
+    </div>
+    <div class="row">
+        <hr class="col s5">
+        <span class="text-white col s2 center">OU</span>
+        <span class="col s1"></span>
+        <hr class="col s5">
+    </div>
+</form>
