@@ -54,7 +54,7 @@ sendPasswordReset = function (req, res, email, username, tokenUrl) {
 
 exports.recoverPassword = function(req, res){
     let password = crypto.createHash('sha1').update(req.body.senhaCliente).digest("hex");
-    var query = "update ?? set ?? = ? WHERE sha1(??) = ?";
+    var query = "update ?? set ?? = ? WHERE sha1(lcase(??)) = ?";
     var params = ["Cliente", "senhaCliente", password, 
                     "emailCliente", req.body.token];  
     res = db.execute(req, res, query, params, validadeRecoverPassword);
@@ -121,8 +121,9 @@ validadeForgot = function(req, res, rows){
     if (rows.length != 1) 
         res.json({"error" : true, "message" : "Não existe nenhum usuário com este e-mail!"});
     else {
-        let tokenUrl = crypto.createHash('sha1').update(req.body.emailCliente).digest("hex");
-        sendPasswordReset(req, res, req.body.emailCliente, rows[0].nomeCliente, tokenUrl);
+        email = req.body.emailCliente;
+        let tokenUrl = crypto.createHash('sha1').update(email.toLowerCase()).digest("hex");
+        sendPasswordReset(req, res, email.toLowerCase(), rows[0].nomeCliente, tokenUrl);
     }
 }
 
