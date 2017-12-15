@@ -1,0 +1,20 @@
+<form class="panel-group" name="recoverForm" ng-submit="submitRecover(recoverForm.$valid)" novalidate>
+    <input id="token" hidden type="text" value="<%= token %>">
+    <div class="login-input row card-panel">
+        <div class="input-field">
+            <i class="material-icons prefix">vpn_key</i>
+            <input id="password" ng-model="data.password" type="password" ng-minlength="6" class="validate" required>
+            <label for="password">Nova Senha</label>
+        </div>
+    </div>
+    <div class="login-input row card-panel">
+        <div class="input-field">
+            <i class="material-icons prefix">vpn_key</i>
+            <input id="repeat_password" ng-model="data.repeatPassword" type="password" ng-minlength="6" class="validate" required>
+            <label for="repeat_password">Repita a Senha Nova</label>
+        </div>
+    </div>               
+    <div class="row">
+        <button type="submit" ng-disabled="recoverForm.$invalid" class="color-primary btn max-width waves-effect waves-light">Cadastrar Nova Senha</button>
+    </div>
+</form>

@@ -1,5 +1,19 @@
-db = require("../db");
+var db = require("../db");
 var crypto = require('crypto');
+var sender = "smtps://email.find.it%40gmail.com";
+var password = "@appFindIt";
+
+var nodeMailer = require("nodemailer");
+var EmailTemplate = require("email-templates").EmailTemplate;
+
+var transporter = nodeMailer.createTransport(sender + ':' + password + '@smtp.gmail.com');
+
+var sendResetPasswordLink = transporter.templateSender(
+  new EmailTemplate('views/templates/resetPassword'), {
+    	from: "support@app-find-it.herokuapp.com",
+  });
+
+
 exports.getAllUsers = function(req, res){
     var query = "SELECT * FROM ??";
     var params = ["Cliente"];
@@ -8,10 +22,43 @@ exports.getAllUsers = function(req, res){
 };
 
 exports.getUser = function(req, res){
-    var query = "SELECT * FROM ?? WHERE ??=?";
+    var query = "SELECT * FROM ?? WHERE ?? = ?";
     var params = ["Cliente", "codigoCliente", req.params.codigoCliente];  
     db.execute(req, res, query, params, null);  
 };
+
+exports.forgot = function(req, res){
+    var query = "SELECT * FROM ?? WHERE lcase(??) = ?";
+    var params = ["Cliente", "emailCliente", req.body.emailCliente]; 
+    db.execute(req, res, query, params, validadeForgot);  
+}
+
+sendPasswordReset = function (req, res, email, username, tokenUrl) {
+    // transporter.template
+    sendResetPasswordLink({
+        to: email,
+        subject: 'Resetar Senha - Find-It'
+    }, {
+        username: username,
+        token: tokenUrl,
+        year: new Date().getFullYear()
+    }, function (err, info) {
+        if (err) {
+            res.json({"error" : true, "message" : err});
+            console.log(err);
+        } else {
+            res.json({"error" : false, "message" : "Será enviado um e-mail para você cadastrar uma nova senha"});            
+        }
+    });
+};
+
+exports.recoverPassword = function(req, res){
+    let password = crypto.createHash('sha1').update(req.body.senhaCliente).digest("hex");
+    var query = "update ?? set ?? = ? WHERE sha1(??) = ?";
+    var params = ["Cliente", "senhaCliente", password, 
+                    "emailCliente", req.body.token];  
+    res = db.execute(req, res, query, params, validadeRecoverPassword);
+} 
 
 exports.getLoggedUser = function(req, res){    
     if(req.session.codigoCliente || req.cookies.findit_client_cookie){
@@ -61,6 +108,23 @@ validadeLogin = function(req, res, rows){
         res.json({"error" : true, "message" : 'Senha incorreta'});
     }
 };
+
+validadeRecoverPassword = function(req, res, rows){
+    if(rows.affectedRows == 1)
+        res.json({"error" : false, "message" : "Senha alterada com sucesso!"});
+    else
+        res.json({"error" : true, "message" : "Não foi possível alterar sua senha. Tente novamente!"});
+    
+}
+
+validadeForgot = function(req, res, rows){
+    if (rows.length != 1) 
+        res.json({"error" : true, "message" : "Não existe nenhum usuário com este e-mail!"});
+    else {
+        let tokenUrl = crypto.createHash('sha1').update(req.body.emailCliente).digest("hex");
+        sendPasswordReset(req, res, req.body.emailCliente, rows[0].nomeCliente, tokenUrl);
+    }
+}
 
 
 

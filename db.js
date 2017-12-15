@@ -16,6 +16,7 @@ exports.execute = function(req, res, query, params, fun){
           return;
         }         
         query = mysql.format(query, params);
+        console.log("query: " + query);
         connection.query(query, function(err,rows){
             connection.release();
             if(!err) {

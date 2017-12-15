@@ -12,7 +12,9 @@
             case 'forgot' : %>
                     <% title += 'Esqueci minha Senha' %>
                     <% break;
-            
+            case 'recover' : %>
+                <% title += 'Recuperar Senha' %>
+                <% break;
             } %>
         <% include partials/header.ejs %>
         <script src="/js/auth.js"></script>    
@@ -31,6 +33,9 @@
                     <% break;                
                 case 'forgot' : %>
                     <% include partials/forgot.ejs %>
+                    <% break;
+                case 'recover' : %>
+                    <% include partials/recover.ejs %>
                     <% break;
                 
                 } %>

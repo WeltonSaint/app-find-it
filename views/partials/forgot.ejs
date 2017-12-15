@@ -1,12 +1,12 @@
-<form class="panel-group">
+<form class="panel-group" name="forgotForm" ng-submit="submitForgot(forgotForm.$valid)">
     <div class="login-input row card-panel">
         <div class="input-field">
             <i class="material-icons prefix">local_post_office</i>
-            <input id="email" type="email" class="validate">
+            <input id="email" ng-model="data.email" type="email" class="validate" required>
             <label for="email">Email</label>
         </div>
     </div>               
     <div class="row">
-        <button class="color-primary btn max-width waves-effect waves-light">Recuperar Senha</button>
+        <button ng-disabled="forgotForm.$invalid" class="color-primary btn max-width waves-effect waves-light">Recuperar Senha</button>
     </div>
 </form>

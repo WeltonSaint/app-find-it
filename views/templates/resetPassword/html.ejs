@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <!--[if !mso]><!-->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!--<![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title></title>
+
+	<style type="text/css">
+		html{
+			line-height: 1.5;
+		    font-family: "Roboto", sans-serif;
+		    font-weight: normal;
+		    color: rgba(0,0,0,0.87);
+		}
+
+
+		.btn:hover {
+		    background-color: #2bbbad;
+		    background-color: #1d7d74;
+		    box-shadow: 0 3px 3px 0 rgba(0,0,0,0.14), 0 1px 7px 0 rgba(0,0,0,0.12), 0 3px 1px -1px rgba(0,0,0,0.2);
+		}
+		.btn:focus {
+		    outline: none;
+		    background-color: #2ab7a9;
+		}
+		.btn:active{
+			box-shadow: none!important;
+		    top: 2px;
+		    color: #fff!important;
+		    outline: 0;
+		}
+		.btn {
+			text-decoration: none;
+		    color: #fff;
+		    text-transform: uppercase;
+		    background-color: #26a69a;
+		    text-align: center;
+		    letter-spacing: .5px;
+		    transition: .2s ease-out;
+		    cursor: pointer;
+		}
+	</style>
+	<title></title>
+</head>
+<body style="background-color: #e3e3e3;">	
+	<table cellpadding="0" cellspacing="0" border="0" class="x_main" style="border-spacing:0; border:none; border-collapse:collapse; margin:0; padding:0; width:100%; line-height:100%;">
+		<tbody>			
+			<tr>
+				<td align="center" class="x_content-wrap" style="border:none; border-collapse:collapse; padding:0 20px">
+					<table class="x_content" cellpadding="0" cellspacing="0" border="0" align="center" style="border-spacing:0; border:none; border-collapse:collapse; width:100%; max-width:580px; background-color:#f5f5f5; box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);">
+						<tbody>
+							<tr>
+								<td align="center" class="x_logotop" style="border:none; border-collapse:collapse; text-align:center; box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2); background-color:#00594f;">
+									<a href="#" target="_blank" rel="noopener noreferrer" class="x_nol" style="color:inherit; text-decoration:none; border-bottom:0px none">
+										<p style="color:#f5f5f5; white-space: nowrap;"><img src="https://app-find-it.herokuapp.com/images/app_logo.png" style="width: 70px"></p>
+									</a> 
+								</td>
+							</tr>
+							<tr>
+								<td class="x_box" align="left" style="border:none;border-collapse:collapse;padding-left:30px;padding-right:30px; border-bottom-right-radius:4px;padding-top:8px;padding-bottom:10px;border-bottom-left-radius:4px;">
+									<p style="margin:0; font-weight:normal; padding:1em 0; font-size:18px; line-height:26px;">
+									<span style="font-size:24px; line-height:1.125em; color:#00594f">Hello <%= username %>!</span><br>
+									You requested for a password reset.</br>
+                                    Please complete your password reset clicking the below button</br></p>
+									<p style="margin:0; font-weight:normal; padding:1em 0; font-size:18px; line-height:26px; color:#f5f5f5">
+									<a class="btn"  href="https://app-find-it.herokuapp.com/recover/<%= token %>" target="_blank" rel="noopener noreferrer" style="text-decoration:none; border-bottom:1px solid; padding:10px 40px; background-color:#009687; border-radius:7px; border:2px solid #009687; text-align:center; color:#f5f5f5; box-shadow: 2px 2px 4px 0 rgba(50,50,50,.3) !important;">Reset password</button> </a>
+									<p style="margin:0; font-weight:normal; padding:1em 0; font-size:14px; display:block; margin-top:4px; line-height:18px">
+									Or copy this URL into your browser: <a href="https://app-find-it.herokuapp.com/recover/<%= token %>" target="_blank" rel="noopener noreferrer" style="text-decoration:none; border-bottom:1px solid;">https://app-find-it.herokuapp.com/recover/<%= token %></a> </p>
+								</td>
+							</tr>
+							<tr>
+								<td class="x_signature" align="left" style="border:none; border-collapse:collapse; font-size:12px; line-height:18px; color:#aaa; padding-left:30px; padding-right:30px; padding-top:10px; padding-bottom:60px">
+									For any issues or problems, please contact: <a href="mailto:email.find.it@gmail.com" target="_blank" rel="noopener noreferrer" style="color:inherit; text-decoration:none; border-bottom:1px solid">email.find.it@gmail.com</a><br>
+									© <%= year %> <a href="https://app-find-it.herokuapp.com/" target="_blank" rel="noopener noreferrer" class="x_nol" style="color:inherit; text-decoration:none; border-bottom:0px none">Find-It</a> All rights reserved 
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</body>
+</html>
+

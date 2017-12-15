@@ -44,13 +44,16 @@ router.get("/", routes.index);
 router.get("/login", routes.login);
 router.get("/signup", routes.signup);
 router.get("/forgot", routes.forgot);
+router.get("/recover/:token", routes.recover);
 router.get("/chat/:user_id", routes.chat);
 router.get("/users", user.getAllUsers);
 router.get("/users/:codigoCliente", user.getUser);
 router.post("/users/", user.login);
+router.post("/forgot/", user.forgot);
 router.get("/logoff", user.logoff);
 router.get("/isLogged", user.isLogged);
 router.get("/getLoggedUser", user.getLoggedUser);
+router.post("/recoverPassword/", user.recoverPassword);
 router.get("/item/:codigoCliente/", item.getAllItems);
 app.post('/photo',function(req,res){
     upload(req, res, function(err) {
