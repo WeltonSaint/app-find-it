@@ -44,16 +44,19 @@ sendPasswordReset = function (req, res, email, username, tokenUrl) {
         year: new Date().getFullYear()
     }, function (err, info) {
         if (err) {
-            res.json({"error" : true, "message" : err});
+            res.json({"error" : true, 
+                "message" : err});
             console.log(err);
         } else {
-            res.json({"error" : false, "message" : "Será enviado um e-mail para você cadastrar uma nova senha"});            
+            res.json({"error" : false, 
+                "message" : "Será enviado um e-mail para você cadastrar uma nova senha"});            
         }
     });
 };
 
 exports.recoverPassword = function(req, res){
-    let password = crypto.createHash('sha1').update(req.body.senhaCliente).digest("hex");
+    let password = crypto.createHash('sha1')
+                .update(req.body.senhaCliente).digest("hex");
     var query = "update ?? set ?? = ? WHERE sha1(lcase(??)) = ?";
     var params = ["Cliente", "senhaCliente", password, 
                     "emailCliente", req.body.token];  
@@ -63,7 +66,9 @@ exports.recoverPassword = function(req, res){
 exports.getLoggedUser = function(req, res){    
     if(req.session.codigoCliente || req.cookies.findit_client_cookie){
         var codigoCliente = (req.
-            session.codigoCliente) ? req.session.codigoCliente : req.cookies.findit_client_cookie; 
+            session.codigoCliente) 
+                ? req.session.codigoCliente 
+                : req.cookies.findit_client_cookie; 
         var query = "SELECT * FROM ?? WHERE ??=?";
         var params = ["Cliente", "codigoCliente", codigoCliente];  
         db.execute(req, res, query, params, null);
@@ -71,24 +76,55 @@ exports.getLoggedUser = function(req, res){
         res.json({"code" : 200});    
 }
 
-exports.isLogged = function(req, res){      
-    var value = (req.session.codigoCliente) ? true : false;
-    res.json({"code" : 200, "value" : value});
-}
+exports.login = function(req, res){
+    handleIsExistEmail(req, res, handleLogin);
+};
+
+exports.signup = function(req, res){
+    handleIsExistEmail(req, res, handleSignUp);
+};
 
 exports.logoff = function(req, res){  
     req.session.destroy();
     res.clearCookie("findit_client_cookie");
-    res.redirect("/");
+    res.redirect("/login");
 }
 
-exports.login = function(req, res){
-    let password = crypto.createHash('sha1').update(req.body.senhaCliente).digest("hex");
-    var query = "SELECT * FROM ?? WHERE lcase(??) = ? and ?? = ?";
-    var params = ["Cliente", "emailCliente", req.body.emailCliente,
+handleIsExistEmail = function (req, res, fun) {
+    var query = "SELECT * FROM ?? WHERE lcase(??) = ?";
+    var params = ["Cliente", "emailCliente", req.body.emailCliente];  
+    res = db.execute(req, res, query, params, fun);
+}
+
+handleLogin = function(req, res, rows){
+    if (rows.length == 0)
+        res.json({"error" : true,
+             "message" : "Não existe nenhum usuário com este e-mail!"});
+    else{
+        let password = crypto.createHash('sha1')
+                    .update(req.body.senhaCliente).digest("hex");
+        var query = "SELECT * FROM ?? WHERE lcase(??) = ? and ?? = ?";
+        var params = ["Cliente", "emailCliente", req.body.emailCliente,
                     "senhaCliente", password];  
-    res = db.execute(req, res, query, params, validadeLogin);
-};
+        res = db.execute(req, res, query, params, validadeLogin);
+    }    
+}
+
+handleSignUp = function(req, res, rows){
+    if (rows.length != 0)
+        res.json({"error" : true,
+             "message" : "Já existe um usuário com este e-mail!"});
+    else{
+        let password = crypto.createHash('sha1')
+                    .update(req.body.senhaCliente).digest("hex");
+        var query = "INSERT into ?? (??, ??, ??) values (?, ?, ?)";
+        var params = ["Cliente", "nomeCliente", "emailCliente",
+                     "senhaCliente", req.body.nomeCliente,
+                      req.body.emailCliente, password];  
+        res = db.execute(req, res, query, params, validadeSignUp);
+    }    
+}
+
 
 validadeLogin = function(req, res, rows){
     if (rows.length == 1) {
@@ -104,14 +140,22 @@ validadeLogin = function(req, res, rows){
         if(req.body.continuarLogado)
             res.cookie('findit_client_cookie', rows[0].codigoCliente);        
         res.json({"error" : false, "client" : client});
-    } else {
-        res.json({"error" : true, "message" : 'Senha incorreta'});
-    }
+    } else 
+        res.json({"error" : true, "message" : 'Senha incorreta'});    
 };
+
+validadeSignUp = function (req, res, rows){
+    if(rows.affectedRows == 1)
+        res.json({"error" : false,
+            "message" : "Usuário cadastrado com sucesso!"});
+    else
+        res.json({"error" : true, "message" : "Não foi possível cadastrar este usuário. Tente novamente!"});
+}
 
 validadeRecoverPassword = function(req, res, rows){
     if(rows.affectedRows == 1)
-        res.json({"error" : false, "message" : "Senha alterada com sucesso!"});
+        res.json({"error" : false,
+             "message" : "Senha alterada com sucesso!"});
     else
         res.json({"error" : true, "message" : "Não foi possível alterar sua senha. Tente novamente!"});
     
@@ -119,11 +163,14 @@ validadeRecoverPassword = function(req, res, rows){
 
 validadeForgot = function(req, res, rows){
     if (rows.length != 1) 
-        res.json({"error" : true, "message" : "Não existe nenhum usuário com este e-mail!"});
+        res.json({"error" : true,
+             "message" : "Não existe nenhum usuário com este e-mail!"});
     else {
         email = req.body.emailCliente;
-        let tokenUrl = crypto.createHash('sha1').update(email.toLowerCase()).digest("hex");
-        sendPasswordReset(req, res, email.toLowerCase(), rows[0].nomeCliente, tokenUrl);
+        let tokenUrl = crypto.createHash('sha1')
+                    .update(email.toLowerCase()).digest("hex");
+        sendPasswordReset(req, res, email.toLowerCase(),
+                     rows[0].nomeCliente, tokenUrl);
     }
 }
 

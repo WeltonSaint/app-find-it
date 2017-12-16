@@ -2,7 +2,6 @@ bodyParser  = require("body-parser")
 db = require("../db");
 
 exports.getAllItems = function(req, res){
-    console.log(req.params.codigoCliente);
     var query = "SELECT ??, ??, TIMESTAMP(DATE_ADD(??, INTERVAL +5 HOUR)) as ??, ??, ??, ??, ??, ??, ??" +
                 "FROM ?? natural join ?? natural join ?? " +
                 "where ?? = ?";    

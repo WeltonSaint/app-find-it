@@ -41,6 +41,45 @@ app.controller("authCtrl", function ($window, $scope, $http) {
     }
   }
 
+  $scope.submitSignUp = function (isValid) {    
+    if($scope.data.repeatPassword != $scope.data.password){
+        $scope.msgTitle = "Erro";
+        $scope.msgContent = "As senhas devem ser iguais!";
+        $("#modalMessage").modal("open");
+    } else if(isValid){
+      $http({
+        method: "POST",
+        data: {
+          nomeCliente: $scope.data.name,
+          emailCliente: $scope.data.email,
+          senhaCliente: $scope.data.password,
+        },
+        headers: {
+          "Content-Type": "application/json; charset=utf-8"
+        },
+        url: "/signup/"
+      }).then(function (response) {
+            response = response.data;
+            if(response.error){
+              $scope.msgTitle = "Erro";
+              $scope.msgContent = response.message;
+              $("#modalMessage").modal("open");
+            } else {
+              $scope.msgTitle = "Sucesso";
+              $scope.msgContent = response.message;
+              $("#modalMessage").modal("open");
+              $scope.closeMessage = function (){
+                $window.location.href = "/login";
+              }
+            }
+        }, function error(response) {          
+          $scope.msgTitle = "Erro";
+          $scope.msgContent = response.statusText;
+          $("#modalMessage").modal("open");
+      });
+    }
+  }
+
   $scope.submitForgot = function (isValid) {
     if(isValid){
       $http({

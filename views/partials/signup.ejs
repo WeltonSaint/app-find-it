@@ -1,33 +1,33 @@
-<form class="panel-group">
+<form class="panel-group" name="signUpForm" ng-submit="submitSignUp(signUpForm.$valid)" novalidate>
     <div class="login-input row card-panel">
         <div class="input-field">
             <i class="material-icons prefix">face</i>
-            <input id="full_name" type="text" class="validate">
+            <input id="full_name" type="text" ng-model="data.name" ng-minlength="8" class="validate" required>
             <label for="full_name">Nome Completo</label>
         </div>
     </div>
     <div class="login-input row card-panel">
         <div class="input-field">
             <i class="material-icons prefix">local_post_office</i>
-            <input id="email" type="email" class="validate">
+            <input id="email" ng-model="data.email" type="email" class="validate" required>
             <label for="email">Email</label>
         </div>
     </div>
     <div class="login-input row card-panel">
         <div class="input-field">
             <i class="material-icons prefix">vpn_key</i>
-            <input id="password" type="password" class="validate">
+            <input id="password" ng-model="data.password" type="password" ng-minlength="6" class="validate" required>
             <label for="password">Senha</label>
         </div>
     </div>
     <div class="login-input row card-panel">
         <div class="input-field">
             <i class="material-icons prefix">vpn_key</i>
-            <input id="repeat_password" type="password" class="validate">
+            <input id="repeat_password" ng-model="data.repeatPassword" type="password" ng-minlength="6" class="validate" required>
             <label for="repeat_password">Repita a Senha</label>
         </div>
     </div>                
     <div class="row">
-        <button class="color-primary btn max-width waves-effect waves-light">Cadastrar</button>
+        <button type="submit" ng-disabled="signUpForm.$invalid" class="color-primary btn max-width waves-effect waves-light">Cadastrar</button>
     </div>
 </form>
