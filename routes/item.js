@@ -25,6 +25,12 @@ exports.getAllItems = function(req, res){
         
 };
 
+exports.teste = function(req, res){
+    console.log("blablabla KKKK");
+    res.json({"error" : true,
+             "message" : "Não existe nenhum usuário com este e-mail!"});
+}
+
 exports.getIdItem = function(req, res){
     var query = "SELECT * FROM ?? WHERE ??=?";
     var params = ["users","user_id",req.params.user_id];  

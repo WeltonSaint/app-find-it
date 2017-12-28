@@ -13,13 +13,13 @@ app.controller('indexCtrl', function ($window, $scope, $http) {
       },
       url: '/getLoggedUser/'
     }).then(function (response) {
-      response = response.data;      
-      if(response[0].codigoCliente){
-          $scope.profileImgUser = (response[0].linkFotoCliente)
-           ? response[0].linkFotoCliente : "/images/profile.png";
-          $scope.nameUser = response[0].nomeCliente;
-          $scope.emailUser = response[0].emailCliente;
-          $scope.userID = response[0].codigoCliente;
+      response = response.data;
+      if(response.codigoCliente){
+          $scope.profileImgUser = (response.linkFotoCliente)
+           ? response.linkFotoCliente : "/images/profile.png";
+          $scope.nameUser = response.nomeCliente;
+          $scope.emailUser = response.emailCliente;
+          $scope.userID = response.codigoCliente;
           $http.get("/item/"+$scope.userID)
           .then(function(response) {
               $scope.items = response.data;

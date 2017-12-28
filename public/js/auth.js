@@ -6,6 +6,7 @@ app.controller("authCtrl", function ($window, $scope, $http) {
     }
     return false;
   };
+    
   $(".modal").modal();
   $scope.data = {};
   $scope.msgTitle = "";
@@ -39,7 +40,7 @@ app.controller("authCtrl", function ($window, $scope, $http) {
           $("#modalMessage").modal("open");
       });
     }
-  }
+  } 
 
   $scope.submitSignUp = function (isValid) {    
     if($scope.data.repeatPassword != $scope.data.password){

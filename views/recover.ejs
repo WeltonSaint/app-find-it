@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <% var title= 'Find-It - Recuperar Senha'; %>
+        <% include partials/header.ejs %>
+        <script src="/js/recover.js"></script>    
+    </head>
+    <body ng-controller="recoverCtrl" class="color-primary-dark">
+        <div class="container">
+            <div class="row img-responsive center-align">    
+                <img  src="/images/app_logo.png" alt="App Logo">
+            </div>
+            
+        </div>
+        <div id="modalMessage" class="modal">
+            <div class="modal-content">
+                <h4>{{msgTitle}}</h4>
+                <p>{{msgContent}}</p>
+            </div>
+            <div class="modal-footer">
+                <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat" ng-click="closeMessage()">OK</a>
+            </div>
+        </div>
+    </body>
+</html>

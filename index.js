@@ -1,32 +1,36 @@
-
-var express      = require("express"),
-    routes       = require("./routes"),
-    user         = require("./routes/user"),
-    item         = require("./routes/item"),
-    http         = require("http"),
-    path         = require("path"),
-    multer       = require('multer'),
-    jimp         = require("jimp"),
-    gm           = require('gm'),
-    cookieParser = require('cookie-parser'),
-    bodyParser   = require('body-parser'),
-    session      = require('express-session'),
-    port         = process.env.PORT || 80;
-    router       = express.Router(),
-    app          = express();
-    
+var express           = require("express"),    
+    config            = require("./config"),
+    routes            = require("./routes"),
+    user              = require("./routes/user"),
+    item              = require("./routes/item"),    
+    http              = require("http"),
+    path              = require("path"),
+    passport          = require('passport'),
+    multer            = require('multer'),
+    jimp              = require("jimp"),
+    gm                = require('gm'),
+    cookieParser      = require('cookie-parser'),
+    cookieSession     = require('cookie-session'),
+    bodyParser        = require('body-parser'),
+    session           = require('express-session'),
+    port              = process.env.PORT || 80;
+    router            = express.Router(),
+    app               = express();  
 
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json())
 app.use(session({
-    secret: "findit_badabadaba",
-    name: "findit_session",
-    resave: true,
-    saveUninitialized: true,
-    proxy: true
+    secret              : config.secretSession,
+    name                : config.nameSession,
+    resave              : config.resaveSession,
+    saveUninitialized   : config.saveUninitializedSession,
+    proxy               : config.proxySession
 }));
 app.use(express.static(__dirname + '/public'));
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
@@ -41,6 +45,7 @@ var storage =   multer.diskStorage({
 var upload = multer({ storage : storage }).array('userPhoto',5);
 
 router.get("/", routes.index);
+router.get("/insertItem/", routes.insertItem);
 router.get("/login", routes.login);
 router.get("/signup", routes.signup);
 router.get("/forgot", routes.forgot);
@@ -48,10 +53,25 @@ router.get("/recover/:token", routes.recover);
 router.get("/chat/:user_id", routes.chat);
 router.get("/users", user.getAllUsers);
 router.get("/users/:codigoCliente", user.getUser);
+router.post("/forgot/", user.forgot);
+router.get("/auth/facebook", passport.authenticate("facebook",{ 
+    scope : "email" 
+}));
+router.get('/auth/facebook/callback', passport.authenticate('facebook', { 
+    successRedirect : '/', 
+    failureRedirect : '/login' 
+}),function(req, res) {        
+if (err) 
+    return res.json(err);
+else if (!user) 
+    return res.redirect('/login');
+else       
+    return res.redirect('/');
+});
 router.post("/users/", user.login);
 router.post("/signup/", user.signup);
-router.post("/forgot/", user.forgot);
-router.get("/logoff", user.logoff);
+router.get('/logout', user.logout);
+
 router.get("/getLoggedUser", user.getLoggedUser);
 router.post("/recoverPassword/", user.recoverPassword);
 router.get("/item/:codigoCliente/", item.getAllItems);

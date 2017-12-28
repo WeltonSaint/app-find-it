@@ -1,0 +1,43 @@
+@font-face {
+  font-family: 'find-it-font';
+  src:  url('../fonts/find-it-font.eot?v8xofi');
+  src:  url('../fonts/find-it-font.eot?v8xofi#iefix') format('embedded-opentype'),
+    url('../fonts/find-it-font.ttf?v8xofi') format('truetype'),
+    url('../fonts/find-it-font.woff?v8xofi') format('woff'),
+    url('../fonts/find-it-font.svg?v8xofi#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="fif-"], [class*=" fif-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'find-it-font' !important;
+  speak: none;
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.fif-all-items:before {
+  content: "\e900";
+  color: #6d6d6d;
+}
+.fif-found:before {
+  content: "\e901";
+  color: #6d6d6d;
+}
+.fif-lost:before {
+  content: "\e902";
+  color: #6d6d6d;
+}
+.fif-returned:before {
+  content: "\e903";
+  color: #6d6d6d;
+}

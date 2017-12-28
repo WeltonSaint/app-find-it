@@ -1,5 +1,14 @@
+var geohash = require("geohash").GeoHash;
+
 exports.index = function(req, res){
+    //res.render("index", {option : req.params.option });
     validateIsLogged(req, res, "/login", "index", {option : req.params.option });
+}
+
+exports.insertItem = function(req, res){
+    console.log(req.connection.remoteAddress);
+    validateIsLogged(req, res, "/login", "insertItem", 
+                        { lat:-64, lon:-31});
 }
 
 exports.login = function(req, res){
@@ -27,14 +36,14 @@ exports.notFound = function(req, res){
 }
 
 validateIsLogged = function(req, res, redirect, render, renderValues) {
-    if((req.session) && req.session.codigoCliente || req.cookies.findit_client_cookie)      
+    if(req.cookies.findit_client_cookie || req.isAuthenticated())      
         res.render(render, renderValues); 
     else
         res.redirect(redirect);
 }
 
 validateIsNotLogged = function(req, res, redirect, render, renderValues) {
-    if(req.session.codigoCliente || req.cookies.findit_client_cookie)
+    if(req.cookies.findit_client_cookie || req.isAuthenticated())
         res.redirect(redirect);
     else
         res.render(render, renderValues);
