@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html ng-app="app" ng-controller="indexCtrl" data-ng-init="init()" class="no-js" lang="pt-br">
     <head>
-        <% var title= 'Find-It'; %>
+        <% var title= 'Find-It - ' + value; %>
         <% include partials/header.ejs %>
         <script src="/js/index.js"></script>    
         <script>
@@ -41,26 +41,48 @@
     
  -->
      <div class="container">
-        <h2 class="text-primary-dark">{{option}} :</h2>
+        <h2 class="text-primary-dark"><%= option %></h2>
      <!--   <label>Name:</label>
         <input type="text" ng-model="yourName" placeholder="Enter a name here">
         <hr>
         <h1>Hello {{yourName}}!</h1> -->
         <div>
-            <div class="row" ng-repeat="x in items">
+            <% if (items == 0){ %>
+            <div class="valign-wrapper">
+                <h5 class="center-align">Nenhum item</h5>
+            </div>
+            <% } else { %>
+            <% items.forEach(function(item) { %>
+            <div class="row">
                 <div class="col s12">
                     <div class="card">
                         <div class="card-content">                        
-                            <p>{{x.nomeItem}}</p>
-                            <p>{{x.dataCadastro}}</p>
-                            <p>{{x.nomeItem}}</p>
-                            <p>{{x.nomeCategoria}}</p>
-                            <p>{{x.nomeStatus}}</p>                            
-                            <p>{{x.descricaoItem}}</p>
+                            <h2 class="text-primary-dark"><%= item.nomeItem %></h2>
+                            <h5><%= item.dataCadastro %></h5>
+                            <h5>Categoria: <%= item.nomeCategoria %></h5>
+                            <h5>Status: <%= item.nomeStatus %></h5>                            
+                            <h5>Descrição: <%= item.descricaoItem %></h5>
+                            <li class="divider"></li>
+                            <h5>Fotos:</h5>
+                            <% if (item.fotosItem.length > 0){ %>
+                                <div class="carousel">
+                            <% for (fotoItem of item.fotosItem){ %>                                
+                                <a class="carousel-item" href="#<%= fotoItem.substring(fotoItem.lastIndexOf('/') + 1, fotoItem.lastIndexOf('.')); %>">
+                                    <img width="250" src="<%= fotoItem %>">
+                                </a>                                                           
+                            <% } %>
+                            </div>
+                            <% } else { %>
+                            <div class="carousel-empty valign-wrapper">
+                                <h5 class="right-align">Nenhuma foto cadastrada</h5>
+                            </div>
+                            <% } %>
                         </div>
                     </div>
                 </div>
             </div>
+            <% }); %>
+            <% } %>
         </div>
     </div> 
     <div class="fixed-action-btn">

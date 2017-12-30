@@ -47,7 +47,45 @@ var upload = multer({ storage : storage }).array('userPhoto',5);
 /**
  * Routes access
  */
-router.get("/", routes.index);
+router.get("/", function (req, res) {
+    user.getLoggedUser(req, res, function (req, res, user) {
+        var value = "Meus Itens",
+            option = "Todos os Itens: ";
+            items = item.getAllItems(req, res, user, option, value, validateRenderIndex)
+    });        
+});
+router.get("/item/:option", function (req, res) {
+    user.getLoggedUser(req, res, function (req, res, user) {
+        var value,
+            option,
+            items;
+        switch(req.params.option){
+            case 'all':
+                option = "Todos os Itens: ";
+                value = "Meus Itens";
+                items = item.getAllItems(req, res, user, option, value, validateRenderIndex)
+                break;
+            case 'lost':
+                option = "Itens Perdidos: ";
+                value = "Meus Itens Perdidos";
+                items = item.getLostItems(req, res, user, option, value, validateRenderIndex)
+                break;
+            case 'found':
+                option = "Itens Encontrados: ";
+                value = "Meus Itens Encontrados";
+                items = item.getFoundItems(req, res, user, option, value, validateRenderIndex)
+                break;
+            case 'returned':
+                option = "Itens Devolvidos: ";
+                value = "Meus Itens Devolvidos";
+                items = item.getReturnedItems(req, res, user, option, value, validateRenderIndex)
+                break;
+            default:
+                routes.notFound(req,res);
+                break;
+        }        
+    });    
+});
 router.get("/insertItem/", routes.insertItem);
 router.get("/login", routes.login);
 router.get("/signup", routes.signup);
@@ -66,7 +104,7 @@ router.post("/signup/", user.signup);
 router.post("/loginSmartphone/", user.loginSmartphone);
 router.post("/signupSmartphone/", user.signupSmartphone);
 router.get('/logout', user.logout);
-router.get("/getLoggedUser", user.getLoggedUser);
+//router.get("/getLoggedUser", user.getLoggedUser);
 router.post("/recoverPassword/", user.recoverPassword);
 router.get("/auth/facebook", passport.authenticate("facebook",{ 
     scope : "email" 
@@ -86,10 +124,10 @@ router.get('/auth/facebook/callback', passport.authenticate('facebook', {
 /**
  * Requests items routes 
  */
-router.get("/item/all/:codigoCliente/", item.getAllItems);
+/*router.get("/item/:option/:codigoCliente/", item.getAllItems);
 router.get("/item/lost/:codigoCliente/", item.getLostItems);
 router.get("/item/found/:codigoCliente/", item.getFoundItems);
-router.get("/item/returned/:codigoCliente/", item.getReturnedItems);
+router.get("/item/returned/:codigoCliente/", item.getReturnedItems);*/
 
 
 app.post('/photo',function(req,res){
@@ -134,6 +172,15 @@ app.use("*", routes.notFound);
 var server = http.createServer(app);
 server.listen(port);
 console.log("http server listening on %d", port);
+
+validateRenderIndex = function (req, res, user, option, value, items) {
+    routes.index(req, res, {
+        "option" : option,
+        "value" : value,
+        "user" : user,
+        "items": items
+    });
+};
 
 function getSizeImage(pathImg) {
     return new Promise(function(resolve, reject) {

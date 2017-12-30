@@ -6,16 +6,43 @@
         <div class="background">
           <img width="300" src="/images/nav_header.png" >
         </div>
-        <a href="#!user"><img class="circle" ng-src="{{profileImgUser}}"></a>
-        <a href="#!name"><span class="white-text name">{{nameUser}}</span></a>
-        <a href="#!email"><span class="white-text email">{{emailUser}}</span></a>
+        <% var photoUser = (user.linkFotoCliente) ? user.linkFotoCliente : "/images/profile.png" %>        
+        <a href="#!user"><img class="circle" src="<%= photoUser %>"></a>
+        <a href="#!name"><span class="white-text name"><%= user.nomeCliente %></span></a>
+        <a href="#!email"><span class="white-text email"><%= user.emailCliente %></span></a>
       </div>
     </li>
-    <li><a href="#!" class="waves-effect active"><i class="fif-all-items"></i>Meus Itens</a></li>
-    <li><a href="#!" class="waves-effect"><i class="fif-lost"></i>Meus Itens Perdidos</a></li>
-    <li><a href="#!" class="waves-effect"><i class="fif-found"></i>Meus Itens Encontrados</a></li>
-    <li><a href="#!" class="waves-effect"><i class="fif-returned"></i>Meus Itens Devolvidos</a></li>    
-    <li><a href="#!" class="waves-effect"><i class="material-icons">insert_comment</i>Minhas Conversas</a></li>
+    <% if (value == "Meus Itens") { %>
+    <li class="active">
+    <% } else { %>
+    <li>
+    <% } %>
+      <a href="/item/all/" class="waves-effect"><i class="fif-all-items"></i>Meus Itens</a>
+    </li>
+    <% if (value == "Meus Itens Perdidos") { %>
+    <li class="active">
+    <% } else { %>
+    <li>
+    <% } %>
+      <a href="/item/lost/" class="waves-effect"><i class="fif-lost"></i>Meus Itens Perdidos</a>
+    </li>
+    <% if (value == "Meus Itens Encontrados") { %>
+    <li class="active">
+    <% } else { %>
+    <li>
+    <% } %>
+      <a href="/item/found/" class="waves-effect"><i class="fif-found"></i>Meus Itens Encontrados</a>
+    </li>
+    <% if (value == "Meus Itens Devolvidos") { %>
+    <li class="active">
+    <% } else { %>
+    <li>
+    <% } %>
+      <a href="/item/returned/" class="waves-effect"><i class="fif-returned"></i>Meus Itens Devolvidos</a>
+    </li>
+    <li>
+      <a href="/chat/<%= user.codigoCliente %>" class="waves-effect"><i class="material-icons">insert_comment</i>Minhas Conversas</a>
+    </li>
     <li><div class="divider"></div></li>
     <li><a class="subheader">Outros</a></li>
     <li><a class="waves-effect" href="#!">Sobre o Find-It</a></li>

@@ -1,8 +1,10 @@
 var app = angular.module('app', []);
 app.controller('indexCtrl', function ($window, $scope, $http) {
   $(".button-collapse").sideNav();
+  $('.carousel').carousel();
+  $('.materialboxed').materialbox();
   $('.modal').modal();
-  $scope.option= "Todos os Itens";
+  /*$scope.option= "Todos os Itens";
   $scope.userID = -1;
   
   $scope.init = function () {
@@ -30,5 +32,5 @@ app.controller('indexCtrl', function ($window, $scope, $http) {
       $scope.msgContent = response.statusText;
       $('#modalMessage').modal('open');
     });
-  };
+  };*/
 });

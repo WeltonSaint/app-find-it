@@ -49,26 +49,26 @@ exports.getAllUsers = function(req, res){
  * @param {*} req 
  * @param {*} res 
  */
-exports.getUser = function(req, res){
+exports.getUser = function(req, res, fun){
     User.findOne({
         where: {
             codigoCliente: req.params.codigoCliente
         }
     }).then(function(user) {
         if (!user) {             
-            res.json({
+            return {
                 "error" : true,
                 "message": "Não foi possível encontrar este usuário" 
-            });            
-        } else          
-            res.json(user);   
-                    
-    }).catch(function(err) {     
-        console.log("Error:", err);     
-        res.json({
+            };            
+        } else if(fun)
+            fun(req, res, user);                            
+        else
+            return user;
+    }).catch(function(err) {   
+        return {
             error : true,
             message: "Ocorreu algum erro. Tente novamente"
-        });     
+        };     
     });  
 };
 
@@ -185,16 +185,15 @@ exports.recoverPassword = function(req, res){
  * @param {*} req 
  * @param {*} res 
  */
-exports.getLoggedUser = function(req, res){      
+exports.getLoggedUser = function(req, res, fun){      
     if(req.cookies.findit_client_cookie){
         req.params.codigoCliente = req.cookies.findit_client_cookie;
         exports.updateLastActivity(req.params.codigoCliente);
-        exports.getUser(req, res);    
+        exports.getUser(req, res, fun);           
     } else if(req.isAuthenticated()){
         exports.updateLastActivity(req.user.codigoCliente);
-        res.json(req.user); 
-    } else 
-        res.json({"code" : 200});    
+        fun(req, res, req.user); 
+    }    
 }
 /**
  * Default request Login.

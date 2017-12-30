@@ -8,8 +8,7 @@ var Sequelize = require("sequelize"),
     ItemPhoto = models.itemPhoto,
     Status    = models.status;
 
-exports.getAllItems = function(req, res){
-    console.log(req.params.codigoCliente);
+exports.getAllItems = function(req, res, user, option, value, fun){
     Category.hasMany(Item, {foreignKey: 'codigoCategoria'});
     Item.belongsTo(Category, {foreignKey: 'codigoCategoria'});    
     Status.hasMany(Item, {foreignKey: 'codigoStatus'});
@@ -32,7 +31,7 @@ exports.getAllItems = function(req, res){
             attributes: [['nomeStatus', 'nomeStatus']]
         }],
         where: {
-            codigoCliente: req.params.codigoCliente
+            codigoCliente: user.codigoCliente
         },
         order:[[
             'dataCadastro',
@@ -78,19 +77,18 @@ exports.getAllItems = function(req, res){
                     }
                 });
             });
-            res.json(newItems);
+            fun(req, res, user, option, value, newItems);
         });                 
     }).catch(function(err) {     
         console.log("Error:", err);     
-        res.json({
+        return {
             error : true,
             message: "Ocorreu algum erro. Tente novamente"
-        });     
+        };     
     });       
 };
 
-exports.getLostItems = function(req, res){
-    console.log(req.params.codigoCliente);
+exports.getLostItems = function(req, res, user, option, value, fun){
     Category.hasMany(Item, {foreignKey: 'codigoCategoria'});
     Item.belongsTo(Category, {foreignKey: 'codigoCategoria'});    
     Status.hasMany(Item, {foreignKey: 'codigoStatus'});
@@ -113,7 +111,7 @@ exports.getLostItems = function(req, res){
             attributes: [['nomeStatus', 'nomeStatus']]
         }],
         where: {
-            codigoCliente: req.params.codigoCliente,
+            codigoCliente: user.codigoCliente,
             '$Status.nomeStatus$': 'Perdido'            
         },
         order:[[
@@ -160,19 +158,18 @@ exports.getLostItems = function(req, res){
                     }
                 });
             });
-            res.json(newItems);
+            fun(req, res, user, option, value, newItems);
         });                 
     }).catch(function(err) {     
         console.log("Error:", err);     
-        res.json({
+        return {
             error : true,
             message: "Ocorreu algum erro. Tente novamente"
-        });     
-    });       
+        };     
+    });        
 };
 
-exports.getFoundItems = function(req, res){
-    console.log(req.params.codigoCliente);
+exports.getFoundItems = function(req, res, user, option, value, fun){
     Category.hasMany(Item, {foreignKey: 'codigoCategoria'});
     Item.belongsTo(Category, {foreignKey: 'codigoCategoria'});    
     Status.hasMany(Item, {foreignKey: 'codigoStatus'});
@@ -195,7 +192,7 @@ exports.getFoundItems = function(req, res){
             attributes: [['nomeStatus', 'nomeStatus']]
         }],
         where: {
-            codigoCliente: req.params.codigoCliente,
+            codigoCliente: user.codigoCliente,
             '$Status.nomeStatus$': 'Encontrado'            
         },
         order:[[
@@ -242,19 +239,18 @@ exports.getFoundItems = function(req, res){
                     }
                 });
             });
-            res.json(newItems);
+            fun(req, res, user, option, value, newItems);
         });                 
     }).catch(function(err) {     
         console.log("Error:", err);     
-        res.json({
+        return {
             error : true,
             message: "Ocorreu algum erro. Tente novamente"
-        });     
+        };     
     });       
 };
 
-exports.getReturnedItems = function(req, res){
-    console.log(req.params.codigoCliente);
+exports.getReturnedItems = function(req, res, user, option, value, fun){
     Category.hasMany(Item, {foreignKey: 'codigoCategoria'});
     Item.belongsTo(Category, {foreignKey: 'codigoCategoria'});    
     Status.hasMany(Item, {foreignKey: 'codigoStatus'});
@@ -277,7 +273,7 @@ exports.getReturnedItems = function(req, res){
             attributes: [['nomeStatus', 'nomeStatus']]
         }],
         where: {
-            codigoCliente: req.params.codigoCliente,
+            codigoCliente: user.codigoCliente,
             '$Status.nomeStatus$': 'Devolvido'            
         },
         order:[[
@@ -324,13 +320,13 @@ exports.getReturnedItems = function(req, res){
                     }
                 });
             });
-            res.json(newItems);
+            fun(req, res, user, option, value, newItems);
         });                 
     }).catch(function(err) {     
         console.log("Error:", err);     
-        res.json({
+        return {
             error : true,
             message: "Ocorreu algum erro. Tente novamente"
-        });     
+        };     
     });       
 };

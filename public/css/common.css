@@ -10,8 +10,21 @@
 .text-white{
     color: white;
 }
+.side-nav > li.active {
+    background-color: #d1d1d1;    
+}
+.side-nav > li.active > a , .side-nav > li.active > a > .fif-lost {
+    color: #009687;
+}
 .max-width{
     width: 100%;
+}
+.carousel{
+    background-color: #d1d1d1;  
+}
+.carousel-empty{
+    background-color: #d1d1d1;
+    height: 400px;
 }
 span.badge {
     min-width: 1.5rem;

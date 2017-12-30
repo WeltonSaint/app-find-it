@@ -1,7 +1,7 @@
 var geohash = require("geohash").GeoHash;
 
-exports.index = function(req, res){
-    validateIsLogged(req, res, "/login", "index", {option : req.params.option });
+exports.index = function(req, res, values){
+    validateIsLogged(req, res, "/login", "index", values);
 }
 
 exports.insertItem = function(req, res){
