@@ -104,6 +104,47 @@ module.exports = function(passport, user) {
         }     
     ));
 
+    passport.use('login-smartphone', new LocalStrategy({     
+        usernameField: 'emailCliente',     
+        passwordField: 'senhaCliente',
+        passReqToCallback: true     
+    }, function(req, emailCliente, senhaCliente, done) {             
+            var User = user;     
+            var isValidPassword = function(userpass, password) {
+                return password == userpass;     
+            }
+     
+            User.findOne({
+                where: {
+                    emailCliente: emailCliente
+                }
+            }).then(function(user) {
+                if (!user) { 
+                    return done({
+                        error: true,
+                        message: "Não existe nenhum usuário com este e-mail!"
+                    }, false);     
+                }
+     
+                if (!isValidPassword(user.senhaCliente, senhaCliente)) {
+                    return done({
+                        error : true,
+                        message: "Senha incorreta"
+                    }, false);     
+                }
+
+                return done(null, user);     
+     
+            }).catch(function(err) {     
+                console.log("Error:", err);     
+                return done({
+                    error : true,
+                    message: "Ocorreu algum erro. Tente novamente"
+                }, false);     
+            });    
+        }     
+    ));
+
     passport.use('signup', new LocalStrategy({
 		usernameField		: 	'emailCliente',
 		passwordField		: 	'senhaCliente',
@@ -130,6 +171,39 @@ module.exports = function(passport, user) {
                     var data = {
                         emailCliente: emailCliente,
                         senhaCliente: userPassword,
+                        nomeCliente: req.body.nomeCliente
+                    };
+                    User.create(data).then(function(newUser, created) {
+                        if (!newUser) 
+                            return done(null, false);   
+                        else
+                            return done(null, newUser);                        
+                    });
+                }
+            });
+        }
+    ));
+
+    passport.use('signup-smartphone', new LocalStrategy({
+		usernameField		: 	'emailCliente',
+		passwordField		: 	'senhaCliente',
+		passReqToCallback	:	true
+
+	}, function(req, emailCliente, senhaCliente, done){
+            User.findOne({
+                where: {
+                    emailCliente: emailCliente
+                }
+            }).then(function(user) {
+                if (user){
+                    return done({
+                        error: true,
+                        message: "Já existe um usuário com este e-mail!"
+                    }, false);
+                } else {
+                    var data = {
+                        emailCliente: emailCliente,
+                        senhaCliente: senhaCliente,
                         nomeCliente: req.body.nomeCliente
                     };
                     User.create(data).then(function(newUser, created) {

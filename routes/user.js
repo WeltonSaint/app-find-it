@@ -186,6 +186,104 @@ exports.login = function(req, res){
     })(req, res);
 };
 
+exports.loginSmartphone = function(req, res){    
+    passport.authenticate('login-smartphone', function(err, user) {
+        if (err)
+            return res.json(err) 
+        else if (user){ 
+            console.log(req.body.continuarLogado);
+            if(req.body.continuarLogado)
+                    res.cookie('findit_client_cookie',
+                        user.codigoCliente); 
+            
+            req.logIn(user, function(err) {
+                if (err)  
+                    return console.log(err);                
+                
+                return res.json({
+                    "error" : false,
+                    "client" : user
+                });
+            });
+        }
+    })(req, res);
+};
+
+exports.loginFacebookSmartphone = function(req, res){    
+    User.findOne({
+        where: {
+            emailCliente: req.body.emailCliente
+        }
+    }).then(function(user) {
+        if (!user) { 
+            res.json({
+                "option" : "createProfileFromFacebook",
+                "nomeCliente" : req.body.nomeCliente,
+                "emailCliente": req.body.emailCliente,
+                "linkFotoCliente": req.body.linkFotoCliente
+            });     
+        } else {
+            User.update({
+                nomeCliente : req.body.nomeCliente,
+                emailCliente: req.body.emailCliente,
+                linkFotoCliente: req.body.linkFotoCliente
+            },{ 
+                where: {
+                    emailCliente: req.body.emailCliente,
+            }}).then(function(user) {
+                User.findOne({
+                    where: {
+                        emailCliente: req.body.emailCliente
+                    }
+                }).then(function(user) {
+                    if (!user) {      
+                        res.json({
+                            error : true,
+                            message: "Não foi possível fazer o login. Tente novamente"
+                        });    
+                    } else {
+                        res.json({
+                            error : false,
+                            client: user
+                        });
+                    }
+                }).catch(function(err) {     
+                    console.log("Error:", err);     
+                    res.json({
+                        error : true,
+                        message: "Ocorreu algum erro. Tente novamente"
+                    });     
+                });                            
+            }).catch(function(err) {     
+                console.log("Error:", err);     
+                res.json({
+                    error : true,
+                    message: "Ocorreu algum erro. Tente novamente"
+                }); 
+            });
+        }   
+
+    }).catch(function(err) {     
+        console.log("Error:", err);     
+        res.json({
+            error : true,
+            message: "Ocorreu algum erro. Tente novamente"
+        });     
+    }); 
+};
+
+exports.signupSmartphone = function(req, res){
+    passport.authenticate('signup-smartphone', function(err, user) {
+        if (err)
+            return res.json(err) 
+        else if (user) 
+        res.json({
+                "error" : false,
+                "message" : "Usuário cadastrado com sucesso!"
+            }); 
+    })(req, res);
+};
+
 exports.signup = function(req, res){
     passport.authenticate('signup', function(err, user) {
         if (err)

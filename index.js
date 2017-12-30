@@ -44,6 +44,9 @@ var storage =   multer.diskStorage({
 });
 var upload = multer({ storage : storage }).array('userPhoto',5);
 
+/**
+ * Routes access
+ */
 router.get("/", routes.index);
 router.get("/insertItem/", routes.insertItem);
 router.get("/login", routes.login);
@@ -51,9 +54,20 @@ router.get("/signup", routes.signup);
 router.get("/forgot", routes.forgot);
 router.get("/recover/:token", routes.recover);
 router.get("/chat/:user_id", routes.chat);
+
+/**
+ * Requests user routes
+ */
 router.get("/users", user.getAllUsers);
 router.get("/users/:codigoCliente", user.getUser);
 router.post("/forgot/", user.forgot);
+router.post("/users/", user.login);
+router.post("/signup/", user.signup);
+router.post("/loginSmartphone/", user.loginSmartphone);
+router.post("/signupSmartphone/", user.signupSmartphone);
+router.get('/logout', user.logout);
+router.get("/getLoggedUser", user.getLoggedUser);
+router.post("/recoverPassword/", user.recoverPassword);
 router.get("/auth/facebook", passport.authenticate("facebook",{ 
     scope : "email" 
 }));
@@ -61,19 +75,14 @@ router.get('/auth/facebook/callback', passport.authenticate('facebook', {
     successRedirect : '/', 
     failureRedirect : '/login' 
 }),function(req, res) {        
-if (err) 
-    return res.json(err);
-else if (!user) 
-    return res.redirect('/login');
-else       
-    return res.redirect('/');
+    if (err) 
+        return res.json(err);
+    else if (!user) 
+        return res.redirect('/login');
+    else       
+        return res.redirect('/');
 });
-router.post("/users/", user.login);
-router.post("/signup/", user.signup);
-router.get('/logout', user.logout);
 
-router.get("/getLoggedUser", user.getLoggedUser);
-router.post("/recoverPassword/", user.recoverPassword);
 router.get("/item/:codigoCliente/", item.getAllItems);
 app.post('/photo',function(req,res){
     upload(req, res, function(err) {
@@ -108,6 +117,9 @@ app.post('/photo',function(req,res){
     });
 });
 
+/**
+ * App uses routes defined
+ */
 app.use("/", router);
 app.use("*", routes.notFound);
 
