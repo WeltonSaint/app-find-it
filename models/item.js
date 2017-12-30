@@ -35,11 +35,12 @@ module.exports = function(sequelize, Sequelize) {
     },
     {
         classMethods: {
-          associate: function(models) {
-            Item.hasOne(models.Category, { foreignKey: 'codigoCategoria' });
-            Item.hasOne(models.Status, { foreignKey: 'codigoStatus' });
-            Item.hasOne(models.User, { foreignKey: 'codigoCliente' });
-          }
+            associate: function(models) {                
+                Item.belongsTo(models.Category, { foreignKey: 'codigoCategoria' });
+                Item.belongsTo(models.Status, { foreignKey: 'codigoStatus' });                
+                Item.belongsTo(models.User, { foreignKey: 'codigoCliente' });
+                Item.hasMany(models.ItemPhoto, {foreignKey: 'codigoItem'});                
+            }
         },
         timestamps: false,
         paranoid: true,

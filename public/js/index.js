@@ -20,7 +20,7 @@ app.controller('indexCtrl', function ($window, $scope, $http) {
           $scope.nameUser = response.nomeCliente;
           $scope.emailUser = response.emailCliente;
           $scope.userID = response.codigoCliente;
-          $http.get("/item/"+$scope.userID)
+          $http.get("/item/all/"+$scope.userID)
           .then(function(response) {
               $scope.items = response.data;
           });

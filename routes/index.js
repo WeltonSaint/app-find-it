@@ -1,7 +1,6 @@
 var geohash = require("geohash").GeoHash;
 
 exports.index = function(req, res){
-    //res.render("index", {option : req.params.option });
     validateIsLogged(req, res, "/login", "index", {option : req.params.option });
 }
 
@@ -25,6 +24,10 @@ exports.forgot = function(req, res){
 
 exports.recover = function (req, res) {
     validateIsNotLogged(req, res, "/", "auth", {value: "recover", token: req.params.token});
+}
+
+exports.profile = function(req, res, values){
+    validateIsLogged(req, res, "/login", "profile", values);
 }
 
 exports.chat = function(req, res){

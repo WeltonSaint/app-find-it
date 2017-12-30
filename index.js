@@ -83,7 +83,15 @@ router.get('/auth/facebook/callback', passport.authenticate('facebook', {
         return res.redirect('/');
 });
 
-router.get("/item/:codigoCliente/", item.getAllItems);
+/**
+ * Requests items routes 
+ */
+router.get("/item/all/:codigoCliente/", item.getAllItems);
+router.get("/item/lost/:codigoCliente/", item.getLostItems);
+router.get("/item/found/:codigoCliente/", item.getFoundItems);
+router.get("/item/returned/:codigoCliente/", item.getReturnedItems);
+
+
 app.post('/photo',function(req,res){
     upload(req, res, function(err) {
         if(err) {

@@ -31,8 +31,9 @@ module.exports = function(sequelize, Sequelize) {
     },
     {
         classMethods: {
-          associate: function(models) {
-          }
+            associate: function(models) {
+                User.hasMany(models.Item, {foreignKey: 'codigoCliente'});                
+            }
         },
         timestamps: false,
         paranoid: true,

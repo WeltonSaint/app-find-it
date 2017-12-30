@@ -19,9 +19,15 @@ var sendResetPasswordLink = transporter.templateSender(
         from: "support@app-find-it.herokuapp.com",
 });
 
+/**
+ * Request to get all users.
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ */
 exports.getAllUsers = function(req, res){
-    User.findAll().then(function(users) {
-        if (!user) {             
+    User.findAll({include: [{model: models.user}]}).then(function(users) {
+        if (!users) {             
             res.json({
                 "error" : true,
                 "message": "Não foi possível encontrar usuários" 
@@ -37,6 +43,12 @@ exports.getAllUsers = function(req, res){
     });        
 };
 
+/**
+ * Request to get info of user.
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ */
 exports.getUser = function(req, res){
     User.findOne({
         where: {
@@ -60,6 +72,12 @@ exports.getUser = function(req, res){
     });  
 };
 
+/**
+ * Request of forgot password;
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ */
 exports.forgot = function(req, res){
     User.findOne({
         where: {
@@ -86,6 +104,9 @@ exports.forgot = function(req, res){
     });  
 }
 
+/**
+ * Function to send email to reset password.
+ */
 sendPasswordReset = function (req, res, email, username, tokenUrl) {    
     sendResetPasswordLink({
         to: email,
@@ -108,6 +129,10 @@ sendPasswordReset = function (req, res, email, username, tokenUrl) {
     });
 };
 
+/**
+ * Function to update the last activity of user.
+ * @param {*} codigoCliente 
+ */
 exports.updateLastActivity = function(codigoCliente){   
     User.update({
         ultimaAtividade: sequelize.literal('CURRENT_TIMESTAMP')
@@ -120,6 +145,12 @@ exports.updateLastActivity = function(codigoCliente){
     });
 } 
 
+/**
+ * R
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ */
 exports.recoverPassword = function(req, res){
     
     let password = generateHash(req.body.senhaCliente);
@@ -149,6 +180,11 @@ exports.recoverPassword = function(req, res){
     });
 } 
 
+/**
+ * Request to get user logged.
+ * @param {*} req 
+ * @param {*} res 
+ */
 exports.getLoggedUser = function(req, res){      
     if(req.cookies.findit_client_cookie){
         req.params.codigoCliente = req.cookies.findit_client_cookie;
@@ -160,7 +196,12 @@ exports.getLoggedUser = function(req, res){
     } else 
         res.json({"code" : 200});    
 }
-
+/**
+ * Default request Login.
+ * 
+ * @param {*]} req 
+ * @param {*} res 
+ */
 exports.login = function(req, res){    
     passport.authenticate('login', function(err, user) {
         if (err)
@@ -186,16 +227,17 @@ exports.login = function(req, res){
     })(req, res);
 };
 
+/**
+ * Request login using smartphone.
+ * 
+ * @param {*]} req 
+ * @param {*} res 
+ */
 exports.loginSmartphone = function(req, res){    
     passport.authenticate('login-smartphone', function(err, user) {
         if (err)
             return res.json(err) 
-        else if (user){ 
-            console.log(req.body.continuarLogado);
-            if(req.body.continuarLogado)
-                    res.cookie('findit_client_cookie',
-                        user.codigoCliente); 
-            
+        else if (user){            
             req.logIn(user, function(err) {
                 if (err)  
                     return console.log(err);                
@@ -209,6 +251,12 @@ exports.loginSmartphone = function(req, res){
     })(req, res);
 };
 
+/**
+ * Request login by Facebook using smartphone.
+ * 
+ * @param {*]} req 
+ * @param {*} res 
+ */
 exports.loginFacebookSmartphone = function(req, res){    
     User.findOne({
         where: {
@@ -272,6 +320,12 @@ exports.loginFacebookSmartphone = function(req, res){
     }); 
 };
 
+/**
+ * Request sign up using smartphone.
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ */
 exports.signupSmartphone = function(req, res){
     passport.authenticate('signup-smartphone', function(err, user) {
         if (err)
@@ -284,6 +338,12 @@ exports.signupSmartphone = function(req, res){
     })(req, res);
 };
 
+/**
+ * Default request sign up.
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ */
 exports.signup = function(req, res){
     passport.authenticate('signup', function(err, user) {
         if (err)
@@ -298,6 +358,12 @@ exports.signup = function(req, res){
     })(req, res);
 };
 
+/**
+ * Request to logout.
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ */
 exports.logout = function(req, res){    
     req.logout();
     res.clearCookie("findit_client_cookie");
@@ -317,6 +383,9 @@ handleLoginFacebook = function(req, rows){
     } */   
 }
 
+/**
+ * Function to generate password hash.
+ */
 generateHash = function(password) {
     return cryptPass = crypto.createHash('sha1')
             .update(password).digest("hex");

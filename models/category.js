@@ -15,8 +15,9 @@ module.exports = function(sequelize, Sequelize) {
     },
     {
         classMethods: {
-          associate: function(models) {
-          }
+            associate: function(models) {
+                Category.hasMany(models.Item, {foreignKey: 'codigoCategoria'});                
+            }
         },
         timestamps: false,
         paranoid: true,

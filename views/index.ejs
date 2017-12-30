@@ -66,15 +66,7 @@
     <div class="fixed-action-btn">
         <a href="/insertItem" class="btn-floating btn-large waves-effect right waves-light teal lighten-2"><i class="material-icons">add</i></a>
     </div>
-    <div id="modalMessage" class="modal">
-        <div class="modal-content">
-            <h4>{{msgTitle}}</h4>
-            <p>{{msgContent}}</p>
-        </div>
-        <div class="modal-footer">
-            <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat" ng-click="closeMessage()">OK</a>
-        </div>
-    </div>
+    <% include partials/modalMessage.ejs %> 
     <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery.form/3.51/jquery.form.min.js"></script>
     <script>
             

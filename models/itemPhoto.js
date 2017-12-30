@@ -1,29 +1,28 @@
 module.exports = function(sequelize, Sequelize) {
  
-    var Status = sequelize.define('status', {
+    var ItemPhoto = sequelize.define('itemPhoto', {
  
-        codigoStatus: {
+        codigoFotoItem: {
             autoIncrement: true,
             primaryKey: true,
             type: Sequelize.INTEGER
         }, 
-        nomeStatus: {
+        linkFotoItem: {
             type: Sequelize.STRING,
             notEmpty: true
-        } 
-        
+        },         
     },
     {
         classMethods: {
             associate: function(models) {
-                Status.hasMany(models.Item, {foreignKey: 'codigoStatus'});
+                ItemPhoto.belongsTo(models.Item, { foreignKey: 'codigoItem' });
             }
         },
         timestamps: false,
         paranoid: true,
-        tableName: 'Status'
+        tableName: 'FotoItem'
     });
- 
-    return Status;
+   
+    return ItemPhoto;
  
 }
