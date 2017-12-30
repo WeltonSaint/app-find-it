@@ -48,43 +48,49 @@ var upload = multer({ storage : storage }).array('userPhoto',5);
  * Routes access
  */
 router.get("/", function (req, res) {
-    user.getLoggedUser(req, res, function (req, res, user) {
-        var value = "Meus Itens",
-            option = "Todos os Itens: ";
-            items = item.getAllItems(req, res, user, option, value, validateRenderIndex)
-    });        
+    if(req.cookies.findit_client_cookie || req.isAuthenticated()){
+        user.getLoggedUser(req, res, function (req, res, user) {
+            var value = "Meus Itens",
+                option = "Todos os Itens: ";
+                items = item.getAllItems(req, res, user, option, value, validateRenderIndex)
+        });
+    } else
+        res.redirect("/login");       
 });
 router.get("/item/:option", function (req, res) {
-    user.getLoggedUser(req, res, function (req, res, user) {
-        var value,
-            option,
-            items;
-        switch(req.params.option){
-            case 'all':
-                option = "Todos os Itens: ";
-                value = "Meus Itens";
-                items = item.getAllItems(req, res, user, option, value, validateRenderIndex)
-                break;
-            case 'lost':
-                option = "Itens Perdidos: ";
-                value = "Meus Itens Perdidos";
-                items = item.getLostItems(req, res, user, option, value, validateRenderIndex)
-                break;
-            case 'found':
-                option = "Itens Encontrados: ";
-                value = "Meus Itens Encontrados";
-                items = item.getFoundItems(req, res, user, option, value, validateRenderIndex)
-                break;
-            case 'returned':
-                option = "Itens Devolvidos: ";
-                value = "Meus Itens Devolvidos";
-                items = item.getReturnedItems(req, res, user, option, value, validateRenderIndex)
-                break;
-            default:
-                routes.notFound(req,res);
-                break;
-        }        
-    });    
+    if(req.cookies.findit_client_cookie || req.isAuthenticated()){
+        user.getLoggedUser(req, res, function (req, res, user) {
+            var value,
+                option,
+                items;
+            switch(req.params.option){
+                case 'all':
+                    option = "Todos os Itens: ";
+                    value = "Meus Itens";
+                    items = item.getAllItems(req, res, user, option, value, validateRenderIndex)
+                    break;
+                case 'lost':
+                    option = "Itens Perdidos: ";
+                    value = "Meus Itens Perdidos";
+                    items = item.getLostItems(req, res, user, option, value, validateRenderIndex)
+                    break;
+                case 'found':
+                    option = "Itens Encontrados: ";
+                    value = "Meus Itens Encontrados";
+                    items = item.getFoundItems(req, res, user, option, value, validateRenderIndex)
+                    break;
+                case 'returned':
+                    option = "Itens Devolvidos: ";
+                    value = "Meus Itens Devolvidos";
+                    items = item.getReturnedItems(req, res, user, option, value, validateRenderIndex)
+                    break;
+                default:
+                    routes.notFound(req,res);
+                    break;
+            }        
+        });
+    }  else
+        res.redirect("/login");  
 });
 router.get("/insertItem/", routes.insertItem);
 router.get("/login", routes.login);

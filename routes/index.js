@@ -1,11 +1,10 @@
 var geohash = require("geohash").GeoHash;
 
 exports.index = function(req, res, values){
-    validateIsLogged(req, res, "/login", "index", values);
+    res.render("index", values); 
 }
 
 exports.insertItem = function(req, res){
-    console.log(req.connection.remoteAddress);
     validateIsLogged(req, res, "/login", "insertItem", 
                         { lat:-64, lon:-31});
 }

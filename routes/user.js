@@ -208,14 +208,13 @@ exports.login = function(req, res){
         else if (!user) 
             return res.redirect('/login');
         else{ 
-            console.log(req.body.continuarLogado);
             if(req.body.continuarLogado)
                     res.cookie('findit_client_cookie',
                         user.codigoCliente); 
             
             req.logIn(user, function(err) {
                 if (err)  
-                    return console.log(err);                
+                    console.log(err);                
                 
                 return res.json({
                     "error" : false,
@@ -239,7 +238,7 @@ exports.loginSmartphone = function(req, res){
         else if (user){            
             req.logIn(user, function(err) {
                 if (err)  
-                    return console.log(err);                
+                    console.log(err);                
                 
                 return res.json({
                     "error" : false,
