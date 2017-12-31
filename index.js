@@ -2,7 +2,8 @@ var express           = require("express"),
     config            = require("./config"),
     routes            = require("./routes"),
     user              = require("./routes/user"),
-    item              = require("./routes/item"),    
+    item              = require("./routes/item"),
+    chat              = require("./routes/chat"),    
     http              = require("http"),
     path              = require("path"),
     passport          = require('passport'),
@@ -92,12 +93,28 @@ router.get("/item/:option", function (req, res) {
     }  else
         res.redirect("/login");  
 });
+router.get("/chat/", function (req, res) {
+    if(req.cookies.findit_client_cookie || req.isAuthenticated()){
+        user.getLoggedUser(req, res, function (req, res, user) {            
+            chat.getAllConversations(req, res, user, function (req, res, user, conversations) {
+                chat.getAllMessages(req, res, user, conversations, function (req, res, user, conversations, messages) {                    
+                    routes.chat(req, res, {
+                        "user" : user,
+                        "conversations": conversations,
+                        "messages": messages
+                    });
+                });                
+            });
+        });
+    } else
+        res.redirect("/login");       
+});
 router.get("/insertItem/", routes.insertItem);
 router.get("/login", routes.login);
 router.get("/signup", routes.signup);
 router.get("/forgot", routes.forgot);
 router.get("/recover/:token", routes.recover);
-router.get("/chat/:user_id", routes.chat);
+
 
 /**
  * Requests user routes
@@ -126,6 +143,8 @@ router.get('/auth/facebook/callback', passport.authenticate('facebook', {
     else       
         return res.redirect('/');
 });
+
+router.get("/chat/conversation/:codigoCliente/", chat.getAllConversations);
 
 /**
  * Requests items routes 

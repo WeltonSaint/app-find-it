@@ -4,6 +4,10 @@ exports.index = function(req, res, values){
     res.render("index", values); 
 }
 
+exports.chat = function(req, res, values){
+    res.render("chat", values); 
+}
+
 exports.insertItem = function(req, res){
     validateIsLogged(req, res, "/login", "insertItem", 
                         { lat:-64, lon:-31});
@@ -27,10 +31,6 @@ exports.recover = function (req, res) {
 
 exports.profile = function(req, res, values){
     validateIsLogged(req, res, "/login", "profile", values);
-}
-
-exports.chat = function(req, res){
-    validateIsLogged(req, res, "/login", "chat", {});
 }
 
 exports.notFound = function(req, res){

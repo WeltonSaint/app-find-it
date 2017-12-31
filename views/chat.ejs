@@ -1,8 +1,62 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html ng-app="app" ng-controller="chatCtrl" data-ng-init="init()" class="no-js" lang="pt-br">
     <head>
         <% var title= 'Find-It - Conversa'; %>
         <% include partials/header.ejs %>
+        <script src="/js/chat.js"></script>   
+        <% var todayHeader, yesterdayHeader, lastDate; %>
+        <% function formatHour(date) {
+            var d = new Date(date),
+                hour = '' + d.getHours(),
+                minutes = '' + d.getMinutes();
+        
+            if (hour.length < 2) hour = '0' + hour;
+            if (minutes.length < 2) minutes = '0' + minutes;
+        
+            return [hour, minutes].join(":");
+        } %>
+        <% function formatDate(date) {
+            var d = new Date(date),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear();
+        
+            if (month.length < 2) month = '0' + month;
+            if (day.length < 2) day = '0' + day;
+        
+            return [day, month, year].join("/");
+        } %>
+        <% function addHeader(lastMessage) {
+            var cal = new Date(),
+                strDate = formatDate(lastMessage);
+            if (formatDate(cal) == formatDate(lastMessage)) {
+                if (!todayHeader) { %>
+                    <div class="message-wrapper">
+                            <div class="time-header animated fadeIn">Hoje</div>
+                    </div>
+                   <% todayHeader = true;
+                }
+            } else {
+                cal.setDate(cal.getDate() - 1);
+                if (formatDate(cal) == strDate) {
+                    if (!yesterdayHeader) { %>
+                        <div class="message-wrapper">
+                                <div class="time-header animated fadeIn">Ontem</div>
+                        </div>
+                       <% yesterdayHeader = true;
+                    }
+                } else {
+                    if (lastDate != strDate) { %>
+                        <div class="message-wrapper">
+                                <div class="time-header animated fadeIn">
+                                <%= strDate %>
+                                </div>
+                        </div>
+                       <% lastDate = strDate;
+                    }
+                }
+            }
+        } %>        
         <link rel="stylesheet" href="/css/chat.css">
     </head>
     <body>
@@ -11,137 +65,80 @@
                 <div class="input-field">
                 <input id="search" type="search" required=""> <label class="label-icon" for="search"><i class="material-icons">search</i></label> <i class="material-icons">close</i> </div>
             </form>
-            <menu class="collection">
-                <a class="collection-item active avatar">
-                <img class="circle online" src="http://cs625730.vk.me/v625730358/1126a/qEjM1AnybRA.jpg">
-                <div class="title">Юния Гапонович</div>
-                <p>online</p>
+            <menu id="conversations-list" class="collection">
+                <% conversations.forEach(function(conversation) { %>
+                <% let className = (conversation.codigoClienteDestinatario != conversations[0].codigoClienteDestinatario) ? "" : "active"; %>
+                <a id="conv_<%= conversation.codigoClienteDestinatario %>" class="collection-item avatar <%= className %>">
+                    <% if (conversation.novasMensagens != 0){ %>
+                    <span class="new badge" data-badge-caption=""><%= conversation.novasMensagens %></span>
+                    <% } %>
+                    <% let photoUser = (conversation.linkFotoCliente) ? conversation.linkFotoCliente : "/images/profile.png" %>
+                    <img class="circle" src="<%= photoUser %>">
+                    <div class="title"><%= conversation.nomeCliente %></div>
+                    <p class="truncate"><%= conversation.ultimaMensagem %></p>
                 </a>
-                <a class="collection-item avatar">
-                <span class="new badge" data-badge-caption="">4</span>
-                <img class="circle" src="http://lorempixel.com/50/50/people/1">
-                <div class="title">Name Fam</div>
-                <p>online</p>
-                </a>
-                <a class="collection-item avatar">
-                <img class="circle" src="http://lorempixel.com/50/50/people/2">
-                <div class="title">Name Fam</div>
-                <p>left 3 min age</p>
-                </a>
-                <a class="collection-item avatar">
-                <img class="circle" src="http://lorempixel.com/50/50/people/1">
-                <div class="title">Name Fam</div>
-                <p>online</p>
-                </a>
-                <a class="collection-item avatar">
-                <img class="circle" src="http://lorempixel.com/50/50/people/2">
-                <div class="title">Name Fam</div>
-                <p>left 3 min age</p>
-                </a>
-                <a class="collection-item avatar">
-                <img class="circle" src="http://lorempixel.com/50/50/people/1">
-                <div class="title">Name Fam</div>
-                <p>online</p>
-                </a>
-                <a class="collection-item avatar">
-                <img class="circle" src="http://lorempixel.com/50/50/people/2">
-                <div class="title">Name Fam</div>
-                <p>left 3 min age</p>
-                </a>
-                <a class="collection-item avatar">
-                <img class="circle" src="http://lorempixel.com/50/50/people/1">
-                <div class="title">Name Fam</div>
-                <p>online</p>
-                </a>
-                <a class="collection-item avatar">
-                <img class="circle" src="http://lorempixel.com/50/50/people/2">
-                <div class="title">Name Fam</div>
-                <p>left 3 min age</p>
-                </a>
-                <a class="collection-item avatar">
-                <img class="circle" src="http://lorempixel.com/50/50/people/1">
-                <div class="title">Name Fam</div>
-                <p>online</p>
-                </a>
-                <a class="collection-item avatar">
-                <img class="circle" src="http://lorempixel.com/50/50/people/2">
-                <div class="title">Name Fam</div>
-                <p>left 3 min age</p>
-                </a>
+                <% }); %>
             </menu>
             </div>
         <div class="navbar-fixed">
             <nav>
                 <div class="nav-wrapper color-primary">
                 <a href="#" data-activates="slide-out" class="button-collapse white-text"><i class="material-icons">menu</i></a>
-                <a href="#" class="brand-logo white-text"> Юния Гапонович </a>
-                <img class="circle header-img online" src="http://cs625730.vk.me/v625730358/1126a/qEjM1AnybRA.jpg"> </div>
+                <a href="#" class="brand-logo white-text"><%= conversations[0].nomeCliente %></a>
+                <% var photo = (conversations[0].linkFotoCliente) ? conversations[0].linkFotoCliente : "/images/profile.png" %>
+                <img class="circle header-img online" src="<%= photo %>"> </div>
             </nav>
             </div>
         </div>
         <div id="content-messages" class="content-messages grey lighten-2">
-            <div class="message-wrapper">
-            <div class="time-header animated fadeIn">Today</div>
-            </div>
-            <div class="message-wrapper them">
-            <img class="circle-wrapper animated bounceIn" src="http://cs625730.vk.me/v625730358/1126a/qEjM1AnybRA.jpg">
-            <div class="text-wrapper animated fadeIn">Hello there!
-                <p class="time-message">17:00</p>
-            </div>
-            </div>
-            <div class="message-continuation-wrapper them">
-            <div class="text-wrapper animated fadeIn">Do you like this? If so check out more on my page...
-                <p class="time-message">17:00</p>
-            </div>
-            </div>
-            <div class="message-continuation-wrapper them">
-            <div class="text-wrapper animated fadeIn">Or maybe just give it a like!
-                <p class="time-message">17:00</p>
-            </div>
-            </div>
-            <div class="message-wrapper me">
-            <img class="circle-wrapper animated bounceIn" src="/images/profile.png">
-            <div class="text-wrapper animated fadeIn">aaaaa
-                <p class="time-message">17:00</p>
-            </div>
-            </div>
-            <div class="message-continuation-wrapper me">
-            <div class="text-wrapper animated fadeIn">aaaaa
-                <p class="time-message">17:00</p>
-            </div>
-            </div>
-            <div class="message-wrapper them">
-            <img class="circle-wrapper animated bounceIn" src="http://cs625730.vk.me/v625730358/1126a/qEjM1AnybRA.jpg">
-            <div class="text-wrapper animated fadeIn">Hello there!
-                <p class="time-message">17:00</p>
-            </div>
-            </div>
-            <div class="message-continuation-wrapper them">
-            <div class="text-wrapper animated fadeIn">Do you like this? If so check out more on my page...
-                <p class="time-message">17:00</p>
-            </div>
-            </div>
-            <div class="message-continuation-wrapper them">
-            <div class="text-wrapper animated fadeIn">Or maybe just give it a like!
-                <p class="time-message">17:00</p>
-            </div>
-            </div>
-            <div class="message-wrapper me">
-            <img class="circle-wrapper animated bounceIn" src="/images/profile.png">
-            <div class="text-wrapper animated fadeIn">aaaaa
-                <p class="time-message">17:00</p>
-            </div>
-            </div>
+            <%  var lastId;
+                messages.forEach(function(message) { addHeader(Date.parse(message.dataEnvio));
+                    if(message.codigoClienteRemetente == user.codigoCliente){                        
+                        if (user.codigoCliente != lastId) { 
+                            let photoUser = (user.linkFotoCliente) ? user.linkFotoCliente : "/images/profile.png" %>
+                        <div class="message-wrapper me"> 
+                            <img class="circle-wrapper animated bounceIn" src="<%= photoUser %>">                       
+                            <div class="text-wrapper animated fadeIn"><%= message.conteudoMensagem %>
+                                <p class="time-message"><%= formatHour(message.dataEnvio) %></p>
+                            </div>
+                        </div>
+                        <% lastId = user.codigoCliente;
+                        } else { %>
+                            <div class="message-continuation-wrapper me">                        
+                                <div class="text-wrapper animated fadeIn"><%= message.conteudoMensagem %>
+                                    <p class="time-message"><%= formatHour(message.dataEnvio) %></p>
+                                </div>
+                            </div>
+                        <% }
+                    } else {                        
+                        if (conversations[0].codigoClienteDestinatario != lastId) { 
+                            let photoUser = (conversations[0].linkFotoCliente) ? conversations[0].linkFotoCliente : "/images/profile.png" %>
+                        <div class="message-wrapper them"> 
+                            <img class="circle-wrapper animated bounceIn" src="<%= photoUser %>">                       
+                            <div class="text-wrapper animated fadeIn"><%= message.conteudoMensagem %>
+                                <p class="time-message"><%= formatHour(message.dataEnvio) %></p>
+                            </div>
+                        </div>
+                        <% lastId = conversations[0].codigoClienteDestinatario;
+                        } else { %>
+                            <div class="message-continuation-wrapper them">                        
+                                <div class="text-wrapper animated fadeIn"><%= message.conteudoMensagem %>
+                                    <p class="time-message"><%= formatHour(message.dataEnvio) %></p>
+                                </div>
+                            </div>
+                        <% }
+                    }    
+                }); 
+            %>            
         </div>
         <div class="write-form grey lighten-2">
             <div class="write-form-wrapper">
-            <a class="btn-floating btn-large waves-effect waves-light color-primary"><i class="material-icons">send</i></a>
-            <div class="input-wrapper"> <textarea id="input" class="input"></textarea> </div>
+                <a class="btn-floating btn-large waves-effect waves-light color-primary"><i class="material-icons">send</i></a>
+                <div class="input-wrapper">
+                    <textarea id="input" class="input" placeholder="Escreva uma mensagem"></textarea>
+                </div>
             </div>
         </div>
-        <script>
-            $(".button-collapse").sideNav();
-        </script>
         <% include partials/modalMessage.ejs %> 
     </body>
 </html>
